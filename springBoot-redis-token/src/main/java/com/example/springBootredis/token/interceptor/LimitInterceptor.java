@@ -17,12 +17,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -32,19 +35,20 @@ import java.lang.reflect.Method;
  * @date 2020/09/24 14:11
  */
 @Aspect
-@Configuration
+@Component
 public class LimitInterceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(LimitInterceptor.class);
 
     private static final String UNKNOWN = "unknown";
 
-    private final RedisTemplate<String, Serializable> limitRedisTemplate;
-
     @Autowired
-    public LimitInterceptor(RedisTemplate<String, Serializable> limitRedisTemplate) {
+    private RedisTemplate<String, Object> limitRedisTemplate;
+
+    //@Autowired
+/*    public LimitInterceptor(RedisTemplate<String, Object> limitRedisTemplate) {
         this.limitRedisTemplate = limitRedisTemplate;
-    }
+    }*/
 
     /**
      * @param pjp
